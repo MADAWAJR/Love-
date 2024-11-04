@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Love for Lavender - Memory Puzzle Game</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url("https://res.cloudinary.com/dhvwpn5bo/image/upload/v1730647996/IMG-20241011-WA0009_mat9kr.jpg") no-repeat center center fixed;
+            background-size: cover;
+            color: #333;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        header {
+            background-color: rgba(255, 105, 180, 0.8);
+            color: white;
+            text-align: center;
+            padding: 20px 0;
+        }
+        nav {
+            background-color: rgba(255, 182, 193, 0.8);
+            padding: 10px 0;
+        }
+        nav ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+        }
+        nav ul li {
+            margin: 0 15px;
+        }
+        nav ul li a {
+            color: #333;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        section {
+            margin: 40px 0;
+            padding: 20px;
+            background-color: rgba(255, 255, 255, 0.8);
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        h2 {
+            color: #ff1493;
+        }
+        .timeline {
+            position: relative;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .timeline::after {
+            content: '';
+            position: absolute;
+            width: 6px;
+            background-color: #ff69b4;
+            top: 0;
+            bottom: 0;
+            left: 50%;
+            margin-left: -3px;
+        }
+        .timeline-item {
+            padding: 10px 40px;
+            position: relative;
+            background-color: inherit;
+            width: calc(50% - 40px);
+        }
+        .timeline-item::after {
+            content: '';
+            position: absolute;
+            width: 25px;
+            height: 25px;
+            right: -17px;
+            background-color: white;
+            border: 4px solid #ff69b4;
+            top: 15px;
+            border-radius: 50%;
+            z-index: 1;
+        }
+        .left {
+            left: 0;
+        }
+        .right {
+            left: 50%;
+        }
+        .left::before {
+            content: " ";
+            height: 0;
+            position: absolute;
+            top: 22px;
+            width: 0;
+            z-index: 1;
+            right: 30px;
+            border: medium solid #ff69b4;
+            border-width: 10px 0 10px 10px;
+            border-color: transparent transparent transparent #ff69b4;
+        }
+        .right::before {
+            content: " ";
+            height: 0;
+            position: absolute;
+            top: 22px;
+            width: 0;
+            z-index: 1;
+            left: 30px;
+            border: medium solid #ff69b4;
+            border-width: 10px 10px 10px 0;
+            border-color: transparent #ff69b4 transparent transparent;
+        }
+        .right::after {
+            left: -16px;
+        }
+        .timeline-content {
+            padding: 20px 30px;
+            background-color: #ff69b4;
+            position: relative;
+            border-radius: 6px;
+            color: white;
+        }
+        .timeline-photo {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 6px;
+            margin-bottom: 15px;
+        }
+        .gallery {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+        }
+        .gallery-item {
+            margin: 10px;
+            max-width: 300px;
+        }
+        .gallery-item img {
+            width: 100%;
+            height: auto;
+            border-radius: 8px;
+        }
+        .love-letter {
+            background-color: #ffe4e1;
+            padding: 20px;
+            border-radius: 8px;
+            font-style: italic;
+        }
+        .reasons {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+        }
+        .reason-card {
+            width: 200px;
+            height: 100px;
+            margin: 10px;
+            perspective: 1000px;
+            cursor: pointer;
+        }
+        .reason-card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+        }
+        .reason-card:hover .reason-card-inner {
+            transform: rotateY(180deg);
+        }
+        .reason-card-front, .reason-card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+        }
+        .reason-card-front {
+            background-color: #ff69b4;
+            color: white;
+        }
+        .reason-card-back {
+            background-color: #ffb6c1;
+            color: #333;
+            transform: rotateY(180deg);
+        }
+        .quotes {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .quote {
+            background-color: #ffb6c1;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 8px;
+            max-width: 80%;
+        }
+        .surprise-button {
+            background-color: #ff1493;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .surprise-button:hover {
+            background-color: #ff69b4;
+        }
+        #surprise-message {
+            display: none;
+            margin-top: 20px;
+            padding: 20px;
+            background-color: #ffe4e1;
+            border-radius: 8px;
+        }
+        .whatsapp-button {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: #25D366;
+            color: white;
+            padding: 15px 25px;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: bold;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+        .whatsapp-button:hover {
+            background-color: #128C7E;
+            transform: scale(1.05);
+        }
+        #game-container {
+            background-color: rgba(255, 255, 255, 0.9);
+            border-radius: 8px;
+            padding: 20px;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+        #game-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            margin-top: 20px;
+        }
+        .game-card {
+            width: 100%;
+            aspect-ratio: 1;
+            background-color: #ff69b4;
+            border-radius: 8px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 2em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .game-card.flipped {
+            background-color: #ffb6c1;
+            transform: rotateY(180deg);
+        }
+        #game-info {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+        #new-game-btn {
+            background-color: #ff1493;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        #new-game-btn:hover {
+            background-color: #ff69b4;
+        }
+        @media screen and (max-width: 600px) {
+            .timeline::after {
+                left: 31px;
+            }
+            .timeline-item {
+                width: 100%;
+                padding-left: 70px;
+                padding-right: 25px;
+            }
+            .timeline-item::before {
+                left: 60px;
+                border: medium solid #ff69b4;
+                border-width: 10px 10px 10px 0;
+                border-color: transparent #ff69b4 transparent transparent;
+            }
+            .left::after, .right::after {
+                left: 15px;
+            }
+            .right {
+                left: 0%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Hermosa</h1>
+    </header>
+    <nav>
+        <ul>
+            <li><a href="#timeline">Our Timeline</a></li>
+            <li><a href="#gallery">Photo Gallery</a></li>
+            <li><a href="#letter">Love Letter</a></li>
+            <li><a href="#reasons">Reasons I Love You</a></li>
+            <li><a href="#quotes">Our Quotes</a></li>
+            <li><a href="#surprise">Surprise</a></li>
+            <li><a href="#game">Memory Game</a></li>
+        </ul>
+    </nav>
+    <div class="container">
+        <section id="timeline">
+            <h2>Our Love Timeline</h2>
+            <div class="timeline">
+                <div class="timeline-item left">
+                    <div class="timeline-content">
+                        <img src="https://res.cloudinary.com/dhvwpn5bo/image/upload/v1730723288/romantic-couple-with-love-wallpaper_94574-667_mu5cep.jpg" alt="First Meeting" class="timeline-photo">
+                        <h3>First Meeting</h3>
+                        <p>The day our eyes met and our hearts connected.</p>
+                    </div>
+                </div>
+                <div class="timeline-item right">
+                    <div class="timeline-content">
+                        <img src="https://res.cloudinary.com/dhvwpn5bo/image/upload/v1730723290/romantic-bedroom-ideas-11_dvisna.jpg" alt="First Date" class="timeline-photo">
+                        <h3>First Date</h3>
+                        <p>A magical evening that marked the beginning of our journey.</p>
+                    </div>
+                </div>
+                <div class="timeline-item left">
+                    <div class="timeline-content">
+                        <img src="https://res.cloudinary.com/dhvwpn5bo/image/upload/v1730723068/IMG-20241104-WA0058_gruap5.jpg" alt="First Kiss" class="timeline-photo">
+                        <h3>First Kiss</h3>
+                        <p>A moment of pure bliss that I'll cherish forever.</p>
+                    </div>
+                </div>
+                <div class="timeline-item right">
+                    <div class="timeline-content">
+                        <img src="https://res.cloudinary.com/dhvwpn5bo/image/upload/v1730723264/Venice_Views_fvgxx3.jpg" alt="Moving in" class="timeline-photo">
+                        <h3>Moving In Together</h3>
+                        <p>Starting our life together under one roof.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <section id="gallery">
+            <h2>Photo Gallery</h2>
+            <div class="gallery">
+                <div class="gallery-item">
+                    <img src="https://res.cloudinary.com/dhvwpn5bo/image/upload/v1730647995/IMG-20241011-WA0005_b7fsvz.jpg" alt="Us together">
+                    <p>My favourite</p>
+                </div>
+                
+                <div class="gallery-item">
+                    <img src="https://res.cloudinary.com/dhvwpn5bo/image/upload/v1730647995/IMG-20241011-WA0010_mkvt5w.jpg" alt="Romantic dinner">
+                    <p>cute</p>
+                </div>
+                
+                <div class="gallery-item">
+                    <img src="https://res.cloudinary.com/dhvwpn5bo/image/upload/v1730647995/IMG-20241011-WA0003_s0on4z.jpg" alt="Cooking together">
+                    <p>stunning</p>
+                </div>
+               
+                <div class="gallery-item">
+                    <img src="https://res.cloudinary.com/dhvwpn5bo/image/upload/v1730647996/IMG-20241011-WA0008_bupsrz.jpg" alt="Dancing">
+                    <p>pose</p>
+                
+                
+                </div>
+                <div class="gallery-item">
+                    <img src="https://res.cloudinary.com/dhvwpn5bo/image/upload/v1730647996/IMG-20241011-WA0004_g9pfx3.jpg" alt="Stargazing">
+                    <p>fierce to hike</p>
+                </div>
+
+            </div>
+        </section>
+        
+        <section id="letter">
+            <h2>Love Letter</h2>
+            <div class="love-letter">
+                <p>Hey love,</p>
+                <p>From the moment I first saw you, I knew my life would never be the same. Your beauty, both inside and out, captivates me every day. Your smile brightens even my darkest days, and your laughter is the sweetest melody to my ears.</p>
+                <p>With you, I've found a love  deeper than I ever thought possible. You're not just my partner; you're my best friend, my confidant, and my soulmate. Every moment with you is a treasure, and I look forward to creating countless more memories together.</p>
+                <p>I love you more than words can express, and I'm grateful for every day I get to spend with you.</p>
+                <p>Forever yours,</p>
+                <p>[vivi]</p>
+            </div>
+        </section>
+
+        <section id="reasons">
+            <h2>Reasons I Love You</h2>
+            <div class="reasons">
+                <div class="reason-card">
+                    <div class="reason-card-inner">
+                        <div class="reason-card-front">
+                            <p>Your Smile</p>
+                        </div>
+                        <div class="reason-card-back">
+                            <p>It lights up my world inanibamba tu</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="reason-card">
+                    <div class="reason-card-inner">
+                        <div class="reason-card-front">
+                            <p>Your Kindness</p>
+                        </div>
+                        <div class="reason-card-back">
+                            <p>You make the world a better place kukuwa</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="reason-card">
+                    <div class="reason-card-inner">
+                        <div class="reason-card-front">
+                            <p>Your Support</p>
+                        </div>
+                        <div class="reason-card-back">
+                            <p>nikue nae nikose always there </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <section id="quotes">
+            <h2>Our Favorite Quotes & Inside Jokes</h2>
+            <div class="quotes">
+                <div class="quote">"I love you to the moon and back"</div>
+                <div class="quote">"Remember that time uliniambia ulilia? Na uko jealous sijesahau"</div>
+                <div class="quote">"You're my fav person"</div>
+            </div>
+        </section>
+        
+        <section id="surprise">
+            <h2>Facts</h2>
+            <button class="surprise-button" onclick="revealSurprise()">Press here for a surprise!</button>
+            <div id="surprise-message"></div>
+        </section>
+
+        <section id="game">
+            <h2>Memory Puzzle Game</h2>
+            <div id="game-container">
+                <div id="game-info">
+                    <div>Moves: <span id="moves">0</span></div>
+                    <div>Coins: <span id="coins">100</span></div>
+                </div>
+                <div id="game-grid"></div>
+                <button id="new-game-btn">New Game</button>
+            </div>
+        </section>
+    </div>
+
+    <a href="https://wa.me/254704967186?text=Baby♡%20do%20you%20still%20love%20my%20services." target="_blank" class="whatsapp-button">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="white">
+            <path d="M12 0C5.373 0 0 5.373 0 12c0 2.625.846 5.059 2.284 7.034L.784 23.456l4.5-1.442C7.209 23.256 9.531 24 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm.055 19.975c-1.699 0-3.348-.445-4.793-1.287l-3.337 1.07 1.088-3.264A7.874 7.874 0 0 1 4.023 12c0-4.41 3.594-8.003 8.032-8.003 4.438 0 8.031 3.593 8.031 8.003 0 4.41-3.593 8.002-8.031 8.002z"/>
+        </svg>
+        Say hi
+    </a>
+
+    <script>
+        function revealSurprise() {
+            const surpriseMessage = document.getElementById('surprise-message');
+            const messages = [
+                "I love you more than yesterday, but less than tomorrow.",
+                "You're the best thing that's ever happened to me.",
+                "Every day with you is like a beautiful dream come true.",
+                "You make my heart skip a beat every time I see you."
+            ];
+            const randomMessage = messages[Math.floor(Math.random() * messages.length)];
+            surpriseMessage.textContent = randomMessage;
+            surpriseMessage.style.display = 'block';
+        }
+
+        // Memory Puzzle Game
+        const gameGrid = document.getElementById('game-grid');
+        const movesDisplay = document.getElementById('moves');
+        const coinsDisplay = document.getElementById('coins');
+        const newGameBtn = document.getElementById('new-game-btn');
+
+        let cards = [];
+        let flippedCards = [];
+        let moves = 0;
+        let coins = 100;
+        let matchedPairs = 0;
+
+        const emojis = ['❤️', '🌹', '💍', '💌', '💖', '🎶', '🌟', '🍫', '❤️', '🌹', '💍', '💌', '💖', '🎶', '🌟', '🍫'];
+
+        function createCard(emoji) {
+            const card = document.createElement('div');
+            card.className = 'game-card';
+            card.innerHTML = '<span style="display:none;">' + emoji + '</span>';
+            card.addEventListener('click', flipCard);
+            return card;
+        }
+
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+        }
+
+        function initializeGame() {
+            gameGrid.innerHTML = '';
+            cards = [];
+            flippedCards = [];
+            moves = 0;
+            matchedPairs = 0;
+            movesDisplay.textContent = moves;
+
+            const gameEmojis = emojis.slice(0, 8);
+            const allCards = [...gameEmojis, ...gameEmojis];
+            shuffleArray(allCards);
+
+            allCards.forEach(emoji => {
+                const card = createCard(emoji);
+                cards.push(card);
+                gameGrid.appendChild(card);
+            });
+        }
+
+        function flipCard() {
+            if (flippedCards.length < 2 && !this.classList.contains('flipped')) {
+                this.classList.add('flipped');
+                this.querySelector('span').style.display = 'block';
+                flippedCards.push(this);
+
+                if (flippedCards.length === 2) {
+                    moves++;
+                    movesDisplay.textContent = moves;
+                    setTimeout(checkMatch, 500);
+                }
+            }
+        }
+
+        function checkMatch() {
+            const [card1, card2] = flippedCards;
+            const isMatch = card1.textContent === card2.textContent;
+
+            if (isMatch) {
+                matchedPairs++;
+                if (matchedPairs === 8) {
+                    const earnedCoins = Math.max(50 - moves, 10);
+                    coins += earnedCoins;
+                    coinsDisplay.textContent = coins;
+                    alert(`Congratulations! You won! You earned ${earnedCoins} coins!`);
+                }
+            } else {
+                setTimeout(() => {
+                    card1.classList.remove('flipped');
+                    card2.classList.remove('flipped');
+                    card1.querySelector('span').style.display = 'none';
+                    card2.querySelector('span').style.display = 'none';
+                }, 500);
+            }
+
+            flippedCards = [];
+        }
+
+        newGameBtn.addEventListener('click', initializeGame);
+        initializeGame();
+        
+
+    
+
+    </script>
+</body>
+  </html>
